@@ -399,7 +399,7 @@ module "aks" {
   default_node_pool = "default"
   node_pools = {
     default = {
-      vm_size                      = "Standard_B2s"
+      vm_size                      = "Standard_D8_v3"
       enable_host_encryption       = true
       availability_zones           = local.nodepool_zones
       node_count                   = 3
