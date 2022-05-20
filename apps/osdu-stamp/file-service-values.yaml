@@ -7,10 +7,10 @@ metadata:
 spec:
   values:
     ingress:
-      dns: osdu-self-dplbjhha-785p-gw.eastus.cloudapp.azure.com
+      dns: osdu-self-dplccfff-trhh-gw.eastus.cloudapp.azure.com
     configuration:
     - service: file
-      repository: osduselfcplbjhyaomcr.azurecr.io/file
+      repository: osduselfcplccf9omlcr.azurecr.io/file
       path: /api/file/*
       probe:
         path: /api/file/v2/readiness_check

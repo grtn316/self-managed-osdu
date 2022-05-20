@@ -8,7 +8,7 @@ spec:
   values:
     configuration:
     - service: indexer-queue
-      repository: osduselfcplbjhyaomcr.azurecr.io/indexer-queue
+      repository: osduselfcplccf9omlcr.azurecr.io/indexer-queue
       keyvault: true
       request:
         cpu: 1000m
