@@ -32,7 +32,7 @@ subnet_be_prefix  = "10.10.3.0/28"
 kubernetes_version = "1.21.9"
 aks_agent_vm_count = "6"
 aks_agent_vm_disk  = 128
-aks_agent_vm_size  = "Standard_D8_v3"
+aks_agent_vm_size  = "Standard_D8s_v3"
 
 # Database Settings
 cosmos_databases = [
