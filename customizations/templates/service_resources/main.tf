@@ -106,11 +106,11 @@ locals {
 
   existing_resource_group_name = "rg-osdu"
   existing_vnet_name           = "vnet-osdu"
-  existing_vnet_address_prefix = "10.0.0.0/16"
+  existing_vnet_address_prefix = "10.10.0.0/16"
   existing_subnet_name_fe      = "snfe"
-  existing_subnet_prefix_fe    = "10.0.0.0/24"
+  existing_subnet_prefix_fe    = "10.10.0.0/24"
   existing_subnet_name_aks     = "snaks"
-  existing_subnet_prefix_aks   = "10.0.1.0/24"
+  existing_subnet_prefix_aks   = "10.10.1.0/24"
 
   aks_cluster_name  = "${local.base_name_60}-aks"
   aks_identity_name = format("%s-pod-identity", local.aks_cluster_name)
