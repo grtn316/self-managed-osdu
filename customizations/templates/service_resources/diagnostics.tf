@@ -9,6 +9,7 @@
 #-------------------------------
 # Network
 #-------------------------------
+/*
 resource "azurerm_monitor_diagnostic_setting" "vnet_diagnostics" {
   name                       = "vnet_diagnostics"
   target_resource_id         = module.network.exist_vnet_id
@@ -34,7 +35,7 @@ resource "azurerm_monitor_diagnostic_setting" "vnet_diagnostics" {
     }
   }
 }
-
+*/
 resource "azurerm_monitor_diagnostic_setting" "gw_diagnostics" {
   name                       = "gw_diagnostics"
   target_resource_id         = module.appgateway.id
