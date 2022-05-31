@@ -110,7 +110,7 @@ locals {
   existing_subnet_name_fe      = "snfe"
   existing_subnet_prefix_fe    = "10.10.0.0/24"
   existing_subnet_name_aks     = "snaks"
-  existing_subnet_prefix_aks   = "10.10.1.0/24"
+  existing_subnet_prefix_aks   = "10.10.100.0/22"
 
   aks_cluster_name  = "${local.base_name_60}-aks"
   aks_identity_name = format("%s-pod-identity", local.aks_cluster_name)
