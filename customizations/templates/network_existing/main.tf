@@ -102,7 +102,13 @@ locals {
   app_gw_name         = "${local.base_name_60}-gw"
   istio_app_gw_name   = "${local.base_name_21}-istio-gw"
   appgw_identity_name = format("%s-agic-identity", local.app_gw_name)
+  rt_aks_name         = "${local.base_name_21}-rt-aks"
 
+  existing_resource_group_name = var.existing_resource_group_name
+  existing_vnet_name           = var.existing_vnet_name
+  existing_vnet_address_prefix = var.existing_vnet_address_prefix
+  existing_subnet_name_fe      = var.existing_subnet_name_fe
+  existing_subnet_name_aks     = var.existing_subnet_name_aks
 
   aks_cluster_name  = "${local.base_name_60}-aks"
   aks_identity_name = format("%s-pod-identity", local.aks_cluster_name)
@@ -269,34 +275,17 @@ resource "azurerm_role_assignment" "system_storage_data_contributor" {
 # Network
 #-------------------------------
 module "network" {
-  source = "git::https://github.com/danielscholl-terraform/module-virtual-network?ref=v1.0.0"
+  source = "../../../modules/providers/azure/network-existing"
 
-  name                = local.vnet_name
-  resource_group_name = azurerm_resource_group.main.name
+  existing_resource_group_name = local.existing_resource_group_name
+  existing_vnet_name           = local.existing_vnet_name
+  existing_subnet_name_fe      = local.existing_subnet_name_fe
+  existing_subnet_name_aks     = local.existing_subnet_name_aks
+
   resource_tags       = var.resource_tags
 
-  address_space        = [var.address_space]
-  enforce_subnet_names = false
-
-  subnets = {
-    gw-subnet = { cidrs = [var.subnet_fe_prefix]
-      create_network_security_group = false
-    }
-    iaas-public = {
-      cidrs                         = [var.subnet_aks_prefix]
-      route_table_association       = "aks"
-      create_network_security_group = false
-      # configure_nsg_rules     = false
-      service_endpoints = ["Microsoft.Storage",
-        "Microsoft.AzureCosmosDB",
-        "Microsoft.KeyVault",
-        "Microsoft.ServiceBus",
-      "Microsoft.EventHub"]
-    }
-  }
-
-  route_tables = {
-    aks = {
+  aks_route_table = {
+      route_table_name              = local.rt_aks_name
       disable_bgp_route_propagation = true
       use_inline_routes             = false
       routes = {
@@ -305,11 +294,10 @@ module "network" {
           next_hop_type  = "Internet"
         }
         local-vnet = {
-          address_prefix = var.address_space
+          address_prefix = local.existing_vnet_address_prefix
           next_hop_type  = "vnetlocal"
         }
       }
-    }
   }
 }
 
@@ -319,8 +307,8 @@ module "appgateway" {
   name                = local.app_gw_name
   resource_group_name = azurerm_resource_group.main.name
 
-  vnet_name                       = module.network.vnet.name
-  vnet_subnet_id                  = module.network.subnets["gw-subnet"].id
+  vnet_name                       = module.network.exist_vnet_name
+  vnet_subnet_id                  = module.network.sn_id.fe
   keyvault_id                     = data.terraform_remote_state.central_resources.outputs.keyvault_id
   keyvault_secret_id              = azurerm_key_vault_certificate.default.0.secret_id
   ssl_certificate_name            = local.ssl_cert_name
@@ -378,17 +366,17 @@ module "aks" {
   dns_prefix                 = local.aks_dns_prefix
   network_plugin             = "azure"
   #identity_type          = "UserAssigned"
-  kubernetes_version          = var.kubernetes_version
+  kubernetes_version  = var.kubernetes_version
   network_policy         = "azure"
   configure_network_role = true
 
   virtual_network = {
     subnets = {
       public = {
-        id = module.network.subnets["iaas-public"].id
+        id = module.network.sn_id.aks
       }
     }
-    route_table_id = module.network.route_tables.aks.id
+    route_table_id = module.network.aks_rt.id
   }
 
   linux_profile = {
