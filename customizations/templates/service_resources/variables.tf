@@ -235,7 +235,7 @@ variable "existing_resource_group_name" {
   default     = ""
 }
 
-variable "existing_vnet_name " {
+variable "existing_vnet_name" {
   description = "The name of the existing vnet."
   type        = string
   default     = ""
