@@ -104,12 +104,6 @@ locals {
   appgw_identity_name = format("%s-agic-identity", local.app_gw_name)
   rt_aks_name         = "${local.base_name_21}-rt-aks"
 
-  existing_resource_group_name = var.existing_resource_group_name
-  existing_vnet_name           = var.existing_vnet_name
-  existing_vnet_address_prefix = var.existing_vnet_address_prefix
-  existing_subnet_name_fe      = var.existing_subnet_name_fe
-  existing_subnet_name_aks     = var.existing_subnet_name_aks
-
   aks_cluster_name  = "${local.base_name_60}-aks"
   aks_identity_name = format("%s-pod-identity", local.aks_cluster_name)
   aks_dns_prefix    = local.base_name_60
@@ -277,10 +271,10 @@ resource "azurerm_role_assignment" "system_storage_data_contributor" {
 module "network" {
   source = "../../../modules/providers/azure/network-existing"
 
-  existing_resource_group_name = local.existing_resource_group_name
-  existing_vnet_name           = local.existing_vnet_name
-  existing_subnet_name_fe      = local.existing_subnet_name_fe
-  existing_subnet_name_aks     = local.existing_subnet_name_aks
+  existing_resource_group_name = var.existing_resource_group_name
+  existing_vnet_name           = var.existing_vnet_name
+  existing_subnet_name_fe      = var.existing_subnet_name_fe
+  existing_subnet_name_aks     = var.existing_subnet_name_aks
 
   resource_tags       = var.resource_tags
 
@@ -294,7 +288,7 @@ module "network" {
           next_hop_type  = "Internet"
         }
         local-vnet = {
-          address_prefix = local.existing_vnet_address_prefix
+          address_prefix = var.existing_vnet_address_prefix
           next_hop_type  = "vnetlocal"
         }
       }
