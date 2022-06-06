@@ -68,7 +68,7 @@ COPY configuration/partition.tfvars /osdu-azure/templates/osdu-r3-mvp/data_parti
 COPY configuration/dashboard.tfvars /osdu-azure/templates/osdu-r3-mvp/monitoring_resources/custom.tfvars
 
 # [Option] Use existing Azure Network
-ARG EXISTING_NETWORK="false"
+ARG EXISTING_NETWORK="true"
 RUN bash /tmp/library-scripts/network-existing.sh "${EXISTING_NETWORK}"
 
 # Create SSH Keys
@@ -76,7 +76,6 @@ ARG SSH_PUBLIC_KEY
 RUN mkdir -p /osdu-azure/.ssh && chmod 0700 /osdu-azure/.ssh
 RUN touch /osdu-azure/.ssh/id_rsa && chmod 600 /osdu-azure/.ssh/id_rsa
 RUN echo "$SSH_PUBLIC_KEY" > /osdu-azure/.ssh/id_rsa.pub && chmod 600 /osdu-azure/.ssh/id_rsa.pub
-
 
 # Change Template Working Directory
 ARG WORKING_DIRECTORY
