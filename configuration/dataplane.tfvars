@@ -28,6 +28,13 @@ subnet_fe_prefix  = "10.10.1.0/26"
 subnet_aks_prefix = "10.10.2.0/23"
 subnet_be_prefix  = "10.10.3.0/28"
 
+# Network Existing
+existing_resource_group_name = "myExistingResourceGroup"
+existing_vnet_name           = "myExistingVnet"
+existing_vnet_address_prefix = "10.10.0.0/16"
+existing_subnet_name_fe      = "myExistingSubnetFE"
+existing_subnet_name_aks     = "myExistingSubnetAKS"
+
 # Kubernetes Settings
 kubernetes_version = "1.21.9"
 aks_agent_vm_count = "6"
