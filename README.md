@@ -206,7 +206,7 @@ ARG EXISTING_NETWORK="false"
 RUN bash /tmp/library-scripts/network-existing.sh "${EXISTING_NETWORK}"
 ```
 
-When the value of `ARG EXISTING_NETWORK` is set to `true`, the __network-existing.sh__ script will perform steps to update the Terraform templates with proper references to the Existing Network variables and modules to provision OSDU into the existing network.
+When the value of `ARG EXISTING_NETWORK` is set to `true`, the __network-existing.sh__ script will perform steps to update the Terraform templates with references to the Existing Network variables to provision the OSDU stamp.
 ## Platform Access
 
 __Service Validation__
