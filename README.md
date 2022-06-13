@@ -185,7 +185,7 @@ __[Data Partition](./docs/images/partition.png)__
 
 
 ## Using Existing Network Resources
-By default, the OSDU deployment will create a new isolated Virtual Network with supporting network resources and configurations.  If you have a Virtual Network deployed with two unused  subnets, you can deploy an OSDU instance into the exiting Virtual Network by making the following changes:
+By default, the OSDU deployment will create a new isolated Virtual Network with supporting network resources and configurations.  If you have a Virtual Network deployed with two unused  subnets, you can deploy an OSDU instance into the existing Virtual Network by making the following changes:
 
 1. Update the values of the __Network Existing__ variables in [configuration/dataplane.tfvars](./configuration/dataplane.tfvars)
 
@@ -233,7 +233,7 @@ The [OSDU Stamp AD Application](/docs/images/authenticate.png) must have the pla
 
 ## API Requests
 
-The simpliest way to execute against the Platform is to leverage the HTTP Rest Scripts that make testing and executing API calls easier.  These scripts are compatable with the VS Code Extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
+The simplest way to execute against the Platform is to leverage the HTTP Rest Scripts that make testing and executing API calls easier.  These scripts are compatible with the VS Code Extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
 
 [Rest Client Settings](https://github.com/Huachao/vscode-restclient#environment-variables) can be set to create environments and saved in [VS Code Settings](https://vscode.readthedocs.io/en/latest/getstarted/settings/).
 
