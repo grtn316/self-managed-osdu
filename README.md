@@ -127,7 +127,7 @@ __Generated Secrets__
 Deployment of a self managed osdu instance is performed by executing github actions to work with a [Deployment Stamp](https://docs.microsoft.com/en-us/azure/architecture/patterns/deployment-stamp).  Currently there is only support for the deployment of 1 stamp.
 
 
-1. __[Stamp Initialize](../../actions/workflows/stamp-init.yaml)__: This action initializes any neccesary items in github that are necessary to begin (ie: Randomizer Secrets, ssh keys). _(Time: ~30s)_
+1. __[Stamp Initialize](../../actions/workflows/stamp-init.yaml)__: This action initializes any necessary items in github that are necessary to begin (ie: Randomizer Secrets, ssh keys). _(Time: ~30s)_
 
 2. __[Stamp Builder](../../actions/workflows/stamp-builder.yaml)__: This action provisions resources necessary to support a provisioning process (ie: Terraform State and Secret Storage). _(Time: ~3m)_
 
@@ -191,8 +191,8 @@ By default, the OSDU deployment will create a new isolated Virtual Network with 
 
 __NOTE:__ Verify that the subnets that defined for FE and AKS are not in use by other resources, and are the appropriate size. 
 
-- Subnet FE - The subnet that is used by the Application Gateway should be /24.
-- Subnet AKS - The subnet that is used by the AKS cluster should be at a minimum /22.
+- __Subnet FE__ - The subnet that is used by the Application Gateway should be /24.
+- __Subnet AKS__ - The subnet that is used by the AKS cluster should be /22 or larger.
 
 ```bash
 # Network Existing
@@ -245,7 +245,7 @@ The simplest way to execute against the Platform is to leverage the HTTP Rest Sc
 
 __Retrieve the Rest Client Environment Settings__
 
-For convenience the Rest Client Environment Settings can be retrieved from the `builder` keyvault in the secret `restclient`. To access secrets from the portal an [access policy](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?tabs=azure-portal) must be setup first.
+For convenience the Rest Client Environment Settings can be retrieved from the `builder` key vault in the secret `restclient`. To access secrets from the portal an [access policy](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?tabs=azure-portal) must be setup first.
 
 This json snippet can then be placed in the `.vscode/settings.json` file along with a required AD Application `Client Secret` that is used to authenticate the Rest Client.
 
