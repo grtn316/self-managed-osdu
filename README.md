@@ -189,7 +189,7 @@ By default, the OSDU deployment will create a new isolated Virtual Network with 
 
 1. Update the values of the __Network Existing__ variables in [configuration/dataplane.tfvars](./configuration/dataplane.tfvars) to the values of the existing Virtual Network. 
 
-__NOTE:__ Verify that the subnets that defined for FE and AKS are not in use by other resources, and are the appropriate size. 
+__NOTE:__ Verify that the subnets that are defined for FE and AKS are not in use by other resources, and are the appropriate size. 
 
 - __Subnet FE__ - The subnet that is used by the Application Gateway should be /24.
 - __Subnet AKS__ - The subnet that is used by the AKS cluster should be /22 or larger.
