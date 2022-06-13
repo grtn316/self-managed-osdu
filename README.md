@@ -184,10 +184,15 @@ __[Data Partition](./docs/images/partition.png)__
 4. Azure Storage Account - Qty2 (StorageV2-GZRS)
 
 
-## Using Existing Network Resources
+## Using Existing Virtual Networks
 By default, the OSDU deployment will create a new isolated Virtual Network with supporting network resources and configurations.  If you have a Virtual Network deployed with two unused  subnets, you can deploy an OSDU instance into the existing Virtual Network by making the following changes:
 
-1. Update the values of the __Network Existing__ variables in [configuration/dataplane.tfvars](./configuration/dataplane.tfvars)
+1. Update the values of the __Network Existing__ variables in [configuration/dataplane.tfvars](./configuration/dataplane.tfvars) to the values of the existing Virtual Network. 
+
+__NOTE:__ Verify that the subnets that defined for FE and AKS are not in use by other resources, and are the appropriate size. 
+
+- Subnet FE - The subnet that is used by the Application Gateway should be /24.
+- Subnet AKS - The subnet that is used by the AKS cluster should be at a minimum /22.
 
 ```bash
 # Network Existing
@@ -213,7 +218,7 @@ __Service Validation__
 
 Verify the `osdu-azure` services have successfully started.
 
-Services can be seen by looking in the Azure Portal at the [AKS Workloads](https://docs.microsoft.com/en-us/azure/aks/kubernetes-portal)under the namespace [osdu-azure](./docs/images/deployments.png).
+Services can be seen by looking in the Azure Portal at the [AKS Workloads](https://docs.microsoft.com/en-us/azure/aks/kubernetes-portal) under the namespace [osdu-azure](./docs/images/deployments.png).
 
 To optionally further validate a deployment you will need access to the AKS cluster via command line. Please refer to [cli-validation](./docs/cli-validation.md) for more information.
 
