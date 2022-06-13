@@ -127,7 +127,7 @@ __Generated Secrets__
 Deployment of a self managed osdu instance is performed by executing github actions to work with a [Deployment Stamp](https://docs.microsoft.com/en-us/azure/architecture/patterns/deployment-stamp).  Currently there is only support for the deployment of 1 stamp.
 
 
-1. __[Stamp Initialize](../../actions/workflows/stamp-init.yaml)__: This action initializes any neccesary items in github that are necessary to begin (ie: Randomizer Secrets, ssh keys). _(Time: ~30s)_
+1. __[Stamp Initialize](../../actions/workflows/stamp-init.yaml)__: This action initializes any necessary items in github that are necessary to begin (ie: Randomizer Secrets, ssh keys). _(Time: ~30s)_
 
 2. __[Stamp Builder](../../actions/workflows/stamp-builder.yaml)__: This action provisions resources necessary to support a provisioning process (ie: Terraform State and Secret Storage). _(Time: ~3m)_
 
@@ -184,13 +184,41 @@ __[Data Partition](./docs/images/partition.png)__
 4. Azure Storage Account - Qty2 (StorageV2-GZRS)
 
 
+## Using Existing Virtual Networks
+By default, the OSDU deployment will create a new isolated Virtual Network with supporting network resources and configurations.  If you have a Virtual Network deployed with two unused  subnets, you can deploy an OSDU instance into the existing Virtual Network by making the following changes:
+
+1. Update the values of the __Network Existing__ variables in [configuration/dataplane.tfvars](./configuration/dataplane.tfvars) to the values of the existing Virtual Network. 
+
+__NOTE:__ Verify that the subnets that defined for FE and AKS are not in use by other resources, and are the appropriate size. 
+
+- __Subnet FE__ - The subnet that is used by the Application Gateway should be /24.
+- __Subnet AKS__ - The subnet that is used by the AKS cluster should be /22 or larger.
+
+```bash
+# Network Existing
+existing_resource_group_name = "myExistingResourceGroup"
+existing_vnet_name           = "myExistingVnet"
+existing_vnet_address_prefix = "10.10.0.0/16"
+existing_subnet_name_fe      = "myExistingSubnetFE"
+existing_subnet_name_aks     = "myExistingSubnetAKS"
+```
+
+2. Change the value of `ARG EXISTING_NETWORK` to `true` in [Dockerfile](./Dockerfile)
+
+```bash
+# [Option] Use existing Azure Network
+ARG EXISTING_NETWORK="false"
+RUN bash /tmp/library-scripts/network-existing.sh "${EXISTING_NETWORK}"
+```
+
+When the value of `ARG EXISTING_NETWORK` is set to `true`, the __network-existing.sh__ script will perform steps to update the Terraform templates with references to the Existing Network variables to provision the OSDU stamp.
 ## Platform Access
 
 __Service Validation__
 
 Verify the `osdu-azure` services have successfully started.
 
-Services can be seen by looking in the Azure Portal at the [AKS Workloads](https://docs.microsoft.com/en-us/azure/aks/kubernetes-portal)under the namespace [osdu-azure](./docs/images/deployments.png).
+Services can be seen by looking in the Azure Portal at the [AKS Workloads](https://docs.microsoft.com/en-us/azure/aks/kubernetes-portal) under the namespace [osdu-azure](./docs/images/deployments.png).
 
 To optionally further validate a deployment you will need access to the AKS cluster via command line. Please refer to [cli-validation](./docs/cli-validation.md) for more information.
 
@@ -210,14 +238,14 @@ The [OSDU Stamp AD Application](/docs/images/authenticate.png) must have the pla
 
 ## API Requests
 
-The simpliest way to execute against the Platform is to leverage the HTTP Rest Scripts that make testing and executing API calls easier.  These scripts are compatable with the VS Code Extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
+The simplest way to execute against the Platform is to leverage the HTTP Rest Scripts that make testing and executing API calls easier.  These scripts are compatible with the VS Code Extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
 
 [Rest Client Settings](https://github.com/Huachao/vscode-restclient#environment-variables) can be set to create environments and saved in [VS Code Settings](https://vscode.readthedocs.io/en/latest/getstarted/settings/).
 
 
 __Retrieve the Rest Client Environment Settings__
 
-For convenience the Rest Client Environment Settings can be retrieved from the `builder` keyvault in the secret `restclient`. To access secrets from the portal an [access policy](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?tabs=azure-portal) must be setup first.
+For convenience the Rest Client Environment Settings can be retrieved from the `builder` key vault in the secret `restclient`. To access secrets from the portal an [access policy](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy?tabs=azure-portal) must be setup first.
 
 This json snippet can then be placed in the `.vscode/settings.json` file along with a required AD Application `Client Secret` that is used to authenticate the Rest Client.
 
