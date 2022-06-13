@@ -184,6 +184,29 @@ __[Data Partition](./docs/images/partition.png)__
 4. Azure Storage Account - Qty2 (StorageV2-GZRS)
 
 
+## Using Existing Network Resources
+By default, the OSDU deployment will create a new isolated Virtual Network with supporting network resources and configurations.  If you have a Virtual Network deployed with two unused  subnets, you can deploy an OSDU instance into the exiting Virtual Network by making the following changes:
+
+1. Update the values of the __Network Existing__ variables in [configuration/dataplane.tfvars](./configuration/dataplane.tfvars)
+
+```bash
+# Network Existing
+existing_resource_group_name = "myExistingResourceGroup"
+existing_vnet_name           = "myExistingVnet"
+existing_vnet_address_prefix = "10.10.0.0/16"
+existing_subnet_name_fe      = "myExistingSubnetFE"
+existing_subnet_name_aks     = "myExistingSubnetAKS"
+```
+
+2. Change the value of `ARG EXISTING_NETWORK` to `true` in [Dockerfile](./Dockerfile)
+
+```bash
+# [Option] Use existing Azure Network
+ARG EXISTING_NETWORK="false"
+RUN bash /tmp/library-scripts/network-existing.sh "${EXISTING_NETWORK}"
+```
+
+When the value of `ARG EXISTING_NETWORK` is set to `true`, the __network-existing.sh__ script will perform steps to update the Terraform templates with proper references to the Existing Network variables and modules to provision OSDU into the existing network.
 ## Platform Access
 
 __Service Validation__
